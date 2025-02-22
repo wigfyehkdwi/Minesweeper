@@ -1,6 +1,6 @@
 # Proposal
 
-This game is going to be an implementation of the well-known game *Minesweeper*, which is likely familiar to anyone who has used any version of windows older than Windows 8 for a while.
+This game is going to be an implementation of the well-known game *Minesweeper*, which is likely familiar to anyone who has used any version of Windows older than Windows 8 for a while.
 
 The game will have a grid of tiles, some of which may be mines. If a tile is left-clicked, the following will happen: if it is a mine, it will explode and the game will end. Otherwise it will be cleared. When a tile is right-clicked, if it is not flagged as a mine it will be flagged, otherwise it will be unflagged. 
 

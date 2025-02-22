@@ -8,6 +8,8 @@ public class Grid : MonoBehaviour
     public int Height { get; private set; }
     public int Area => Width * Height;
 
+    public GameObject Tile;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -27,6 +29,7 @@ public class Grid : MonoBehaviour
                       + 8 // Bottom border
                       + 16 * Height; // Tiles (16x16)
 
+        Debug.Log("Updating resolution to " + resWidth + "x" + resHeight);
         Screen.SetResolution(resWidth, resHeight, FullScreenMode.Windowed);
     }
 }

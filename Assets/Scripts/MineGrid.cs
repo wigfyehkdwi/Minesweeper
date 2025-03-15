@@ -14,9 +14,12 @@ public class MineGrid : MonoBehaviour
     public const byte TileWidth = 16;
     public const byte TileHeight = 16;
 
+    private RectTransform rectTransform;
+
     // Start is called before the first frame update
     void Start()
     {
+        rectTransform = GetComponent<RectTransform>();
         Resize(9, 9);
     }
 
@@ -54,8 +57,17 @@ public class MineGrid : MonoBehaviour
             Tiles[x] = new GameObject[Height];
             for (int y = 0; y < Height; y++)
             {
-                var pos = new Vector3(9 + x * TileWidth, 20 + 52 + y * TileHeight, 0);
-                var tile = (GameObject)Instantiate(Tile, pos, Quaternion.identity, transform);
+                var pos = new Vector3(9 + x * TileWidth, 8 + (Height - y - 1) * TileHeight, 0);
+                pos -= rectTransform.localPosition;
+                pos += new Vector3(TileWidth / 2f, TileHeight / 2f, 0);
+                pos -= new Vector3(Screen.width / 2f, Screen.height / 2f, 0);
+
+                Debug.Log("Placing grid tile @ (" + pos.x + ", " + pos.y + ") for grid pos (" + x + ", " + y + ")");
+
+                var tile = (GameObject)Instantiate(Tile, transform);
+                tile.GetComponent<RectTransform>().localPosition = pos;
+
+
                 tile.GetComponent<Tile>().GridPos = new Vector2Int(x, y);
                 Tiles[x][y] = tile;
             }

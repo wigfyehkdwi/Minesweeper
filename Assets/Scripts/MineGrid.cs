@@ -15,6 +15,8 @@ public class MineGrid : MonoBehaviour
     public const byte TileHeight = 16;
 
     private RectTransform rectTransform;
+    private int resWidth;
+    private int resHeight;
 
     // Start is called before the first frame update
     void Start()
@@ -35,13 +37,13 @@ public class MineGrid : MonoBehaviour
 
     public void UpdateResolution()
     {
-        int resWidth = 9 // Left border
-                     + 8 // Right border
-                     + TileWidth * Width; // Tiles (16x16)
-        int resHeight = 20 // Toolbar
-                      + 52 // Top UI/border
-                      + 8 // Bottom border
-                      + TileHeight * Height; // Tiles (16x16)
+        resWidth = 9 // Left border
+                 + 8 // Right border
+                 + TileWidth * Width; // Tiles (16x16)
+        resHeight = 20 // Toolbar
+                  + 52 // Top UI/border
+                  + 8 // Bottom border
+                  + TileHeight * Height; // Tiles (16x16)
 
         Debug.Log("Updating resolution to " + resWidth + "x" + resHeight);
         Screen.SetResolution(resWidth, resHeight, FullScreenMode.Windowed);
@@ -60,7 +62,7 @@ public class MineGrid : MonoBehaviour
                 var pos = new Vector3(9 + x * TileWidth, 8 + (Height - y - 1) * TileHeight, 0);
                 pos -= rectTransform.localPosition;
                 pos += new Vector3(TileWidth / 2f, TileHeight / 2f, 0);
-                pos -= new Vector3(Screen.width / 2f, Screen.height / 2f, 0);
+                pos -= new Vector3(resWidth / 2f, resHeight / 2f, 0);
 
                 Debug.Log("Placing grid tile @ (" + pos.x + ", " + pos.y + ") for grid pos (" + x + ", " + y + ")");
 

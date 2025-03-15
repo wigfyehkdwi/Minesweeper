@@ -64,8 +64,6 @@ public class MineGrid : MonoBehaviour
                 pos += new Vector3(TileWidth / 2f, TileHeight / 2f, 0);
                 pos -= new Vector3(resWidth / 2f, resHeight / 2f, 0);
 
-                Debug.Log("Placing grid tile @ (" + pos.x + ", " + pos.y + ") for grid pos (" + x + ", " + y + ")");
-
                 var tile = (GameObject)Instantiate(Tile, transform);
                 tile.GetComponent<RectTransform>().localPosition = pos;
 

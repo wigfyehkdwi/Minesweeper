@@ -9,7 +9,7 @@ public class MineGrid : MonoBehaviour
     public int Area => Width * Height;
 
     public GameObject Tile;
-    public GameObject[][] Tiles = new GameObject[0][];
+    public Tile[][] Tiles = new Tile[0][];
 
     public const byte TileWidth = 16;
     public const byte TileHeight = 16;
@@ -53,10 +53,10 @@ public class MineGrid : MonoBehaviour
     {
         foreach (var tileArray in Tiles) foreach (var tile in tileArray) Destroy(tile); // Remove the old tiles
 
-        Tiles = new GameObject[Width][];
+        Tiles = new Tile[Width][];
         for (int x = 0; x < Width; x++)
         {
-            Tiles[x] = new GameObject[Height];
+            Tiles[x] = new Tile[Height];
             for (int y = 0; y < Height; y++)
             {
                 var pos = new Vector3(9 + x * TileWidth, 8 + (Height - y - 1) * TileHeight, 0);
@@ -67,10 +67,15 @@ public class MineGrid : MonoBehaviour
                 var tile = (GameObject)Instantiate(Tile, transform);
                 tile.GetComponent<RectTransform>().localPosition = pos;
 
-
-                tile.GetComponent<Tile>().GridPos = new Vector2Int(x, y);
-                Tiles[x][y] = tile;
+                var tilec = tile.GetComponent<Tile>();
+                tilec.Grid = this;
+                tilec.GridPos = new Vector2Int(x, y);
+                Tiles[x][y] = tilec;
             }
         }
+    }
+
+    public void ExplodeMines()
+    { 
     }
 }

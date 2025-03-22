@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class MineGrid : MonoBehaviour
@@ -7,6 +6,7 @@ public class MineGrid : MonoBehaviour
     public int Width { get; private set; }
     public int Height { get; private set; }
     public int Area => Width * Height;
+    public int MineCount { get; set; } = 10;
 
     public GameObject Tile;
     public Tile[][] Tiles = new Tile[0][];
@@ -72,6 +72,24 @@ public class MineGrid : MonoBehaviour
                 tilec.GridPos = new Vector2Int(x, y);
                 Tiles[x][y] = tilec;
             }
+        }
+        AssignMines();
+    }
+
+    public void AssignMines()
+    {
+        int assignedMines = 0;
+        int mineCount = Math.Min(MineCount, Area);
+        while (assignedMines < mineCount)
+        {
+            int x = UnityEngine.Random.Range(0, Width);
+            int y = UnityEngine.Random.Range(0, Height);
+
+            var tile = Tiles[x][y];
+            if (tile.IsMine) continue;
+
+            tile.IsMine = true;
+            assignedMines++;
         }
     }
 

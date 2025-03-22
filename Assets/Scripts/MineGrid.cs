@@ -94,6 +94,14 @@ public class MineGrid : MonoBehaviour
     }
 
     public void ExplodeMines()
-    { 
+    {
+        for (int x = 0; x < Width; x++)
+        {
+            for (int y = 0; y < Height; y++)
+            {
+                var tile = Tiles[x][y];
+                if (tile.IsMine) tile.Explode();
+            }
+        }
     }
 }

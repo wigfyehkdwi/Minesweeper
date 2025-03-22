@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Tile : MonoBehaviour
 {
@@ -9,6 +10,21 @@ public class Tile : MonoBehaviour
     public bool IsMine { get; set; }
     public bool IsClear { get; set; }
     public bool IsFlagged { get; set; }
+
+    public Sprite TileSprite;
+    public Sprite ClearTileSprite;
+    public Sprite MineTileSprite;
+    public Sprite FlaggedTileSprite;
+    public Sprite UnknownTileSprite;
+    public Text adjacentMineText;
+
+    private Image _image;
+
+    public void Awake()
+    {
+        _image = GetComponent<Image>();
+        _image.sprite = TileSprite;
+    }
 
     public void Click()
     {
@@ -19,7 +35,7 @@ public class Tile : MonoBehaviour
     public void Clear()
     {
         IsClear = true;
-        this.gameObject.SetActive(false); // PLACEHOLDER
+        _image.sprite = ClearTileSprite;
 
         var adjacentTiles = GetAdjacentTiles();
         int adjacentMines = 0;
@@ -31,8 +47,14 @@ public class Tile : MonoBehaviour
         }
         else
         {
-            // TODO: Show a number representing the adjacent mine count
+            adjacentMineText.text = adjacentMines.ToString();
+            adjacentMineText.gameObject.SetActive(true);
         }
+    }
+
+    public void Explode()
+    {
+        _image.sprite = MineTileSprite;
     }
 
     public List<Tile> GetAdjacentTiles()

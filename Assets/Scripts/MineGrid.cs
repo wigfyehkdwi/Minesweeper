@@ -104,7 +104,8 @@ public class MineGrid : MonoBehaviour
             for (int y = 0; y < Height; y++)
             {
                 var tile = Tiles[x][y];
-                if (tile.IsMine) tile.Explode();
+
+                if (tile.IsMine && tile.State is not Tile.States.Flagged) tile.Explode();
                 else if (tile.State is Tile.States.Flagged) tile.UpdateSprite(); // Show the incorrectly flagged sprite
             }
         }

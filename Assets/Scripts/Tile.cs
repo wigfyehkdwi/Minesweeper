@@ -27,8 +27,9 @@ public class Tile : MonoBehaviour, IPointerClickHandler
     public Sprite UnknownTileSprite;
     public Sprite ClearTileSprite;
     public Sprite MineTileSprite;
-    public Text adjacentMineText;
+    public Sprite FalseMineTileSprite;
 
+    public Text adjacentMineText;
     private Image _image;
 
     public void Awake()
@@ -114,7 +115,7 @@ public class Tile : MonoBehaviour, IPointerClickHandler
                 sprite = TileSprite;
                 break;
             case States.Flagged:
-                sprite = FlaggedTileSprite;
+                sprite = (IsMine || !Grid.GameEnded) ? FlaggedTileSprite : FalseMineTileSprite;
                 break;
             case States.Unknown:
                 sprite = UnknownTileSprite;

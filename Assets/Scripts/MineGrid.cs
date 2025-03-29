@@ -8,7 +8,7 @@ public class MineGrid : MonoBehaviour
     public int Area => Width * Height;
     public int MineCount { get; set; } = 10;
 
-    public GameObject Tile;
+    public GameObject TilePrefab;
     public Tile[][] Tiles = new Tile[0][];
 
     public const byte TileWidth = 16;
@@ -66,7 +66,7 @@ public class MineGrid : MonoBehaviour
                 pos += new Vector3(TileWidth / 2f, TileHeight / 2f, 0);
                 pos -= new Vector3(resWidth / 2f, resHeight / 2f, 0);
 
-                var tile = (GameObject)Instantiate(Tile, transform);
+                var tile = (GameObject)Instantiate(TilePrefab, transform);
                 tile.GetComponent<RectTransform>().localPosition = pos;
 
                 var tilec = tile.GetComponent<Tile>();
@@ -97,14 +97,16 @@ public class MineGrid : MonoBehaviour
 
     public void ExplodeMines()
     {
+        GameEnded = true;
+
         for (int x = 0; x < Width; x++)
         {
             for (int y = 0; y < Height; y++)
             {
                 var tile = Tiles[x][y];
                 if (tile.IsMine) tile.Explode();
+                else if (tile.State is Tile.States.Flagged) tile.UpdateSprite(); // Show the incorrectly flagged sprite
             }
         }
-        GameEnded = true;
     }
 }

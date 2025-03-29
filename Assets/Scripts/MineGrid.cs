@@ -18,6 +18,8 @@ public class MineGrid : MonoBehaviour
     private int resWidth;
     private int resHeight;
 
+    public bool GameEnded { get; set; }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -103,5 +105,6 @@ public class MineGrid : MonoBehaviour
                 if (tile.IsMine) tile.Explode();
             }
         }
+        GameEnded = true;
     }
 }

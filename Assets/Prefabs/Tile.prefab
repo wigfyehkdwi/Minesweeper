@@ -84,19 +84,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2986996244796717991}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1499656360708785078}
-        m_TargetAssemblyTypeName: Tile, Assembly-CSharp
-        m_MethodName: Click
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!222 &1044075222744728900
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -148,10 +136,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TileSprite: {fileID: 21300000, guid: af22707f7b8391c4d82e1d93ce105567, type: 3}
-  ClearTileSprite: {fileID: 21300000, guid: e7ee1d71fbcfe524699ae548f173e161, type: 3}
-  MineTileSprite: {fileID: 21300000, guid: a565cad08e9a9444397483700860a2f5, type: 3}
   FlaggedTileSprite: {fileID: 21300000, guid: 37fbf010dd13ff546bb18dcdc7937ea3, type: 3}
   UnknownTileSprite: {fileID: 21300000, guid: 9b0fe3b507eadd341abd4258c2915dbe, type: 3}
+  ClearTileSprite: {fileID: 21300000, guid: e7ee1d71fbcfe524699ae548f173e161, type: 3}
+  MineTileSprite: {fileID: 21300000, guid: a565cad08e9a9444397483700860a2f5, type: 3}
   adjacentMineText: {fileID: 1387954369271815804}
 --- !u!1 &9062412047296629522
 GameObject:

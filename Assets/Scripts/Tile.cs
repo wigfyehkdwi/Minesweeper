@@ -2,20 +2,29 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
-public class Tile : MonoBehaviour
+public class Tile : MonoBehaviour, IPointerClickHandler
 {
     public MineGrid Grid { get; set; }
     public Vector2Int GridPos { get; set; } = Vector2Int.zero;
     public bool IsMine { get; set; }
-    public bool IsClear { get; set; }
-    public bool IsFlagged { get; set; }
+    private States _state;
+    public States State
+    {
+        get => _state;
+        set
+        {
+            _state = value;
+            UpdateSprite();
+        }
+    }
 
     public Sprite TileSprite;
-    public Sprite ClearTileSprite;
-    public Sprite MineTileSprite;
     public Sprite FlaggedTileSprite;
     public Sprite UnknownTileSprite;
+    public Sprite ClearTileSprite;
+    public Sprite MineTileSprite;
     public Text adjacentMineText;
 
     private Image _image;
@@ -23,19 +32,31 @@ public class Tile : MonoBehaviour
     public void Awake()
     {
         _image = GetComponent<Image>();
-        _image.sprite = TileSprite;
+        UpdateSprite();
     }
 
-    public void Click()
+    public void OnPointerClick(PointerEventData eventData)
     {
-        if (IsMine) Grid.ExplodeMines();
-        else if (!IsClear) Clear();
+        if (Grid.GameEnded) return;
+
+        switch (eventData.button)
+        {
+            case PointerEventData.InputButton.Left:
+                if (State is States.Unchecked or States.Unknown)
+                {
+                    if (IsMine) Grid.ExplodeMines();
+                    else Clear();
+                }
+                break;
+            case PointerEventData.InputButton.Right:
+                if (State is not States.Clear and not States.Exploded) AlterState();
+                break;
+        }
     }
 
     public void Clear()
     {
-        IsClear = true;
-        _image.sprite = ClearTileSprite;
+        State = States.Clear;
 
         var adjacentTiles = GetAdjacentTiles();
         int adjacentMines = 0;
@@ -43,7 +64,13 @@ public class Tile : MonoBehaviour
 
         if (adjacentMines == 0)
         {
-            foreach (var tile in adjacentTiles) if (!tile.IsClear) tile.Clear();
+            foreach (var tile in adjacentTiles)
+            {
+                if (tile.State is States.Unchecked or States.Unknown)
+                {
+                    tile.Clear();
+                }
+            }
         }
         else
         {
@@ -54,7 +81,12 @@ public class Tile : MonoBehaviour
 
     public void Explode()
     {
-        _image.sprite = MineTileSprite;
+        State = States.Exploded;
+    }
+
+    public void AlterState()
+    {
+        State = (States)(((int)State + 1) % 3);
     }
 
     public List<Tile> GetAdjacentTiles()
@@ -69,5 +101,39 @@ public class Tile : MonoBehaviour
             }
         }
         return list;
+    }
+
+    public void UpdateSprite()
+    {
+        Sprite sprite = null;
+        switch (State)
+        {
+            case States.Unchecked:
+                sprite = TileSprite;
+                break;
+            case States.Flagged:
+                sprite = FlaggedTileSprite;
+                break;
+            case States.Unknown:
+                sprite = UnknownTileSprite;
+                break;
+            case States.Clear:
+                sprite = ClearTileSprite;
+                break;
+            case States.Exploded:
+                sprite = MineTileSprite;
+                break;
+        }
+
+        if (sprite != null) _image.sprite = sprite;
+    }
+
+    public enum States
+    {
+        Unchecked,
+        Flagged,
+        Unknown,
+        Clear,
+        Exploded
     }
 }

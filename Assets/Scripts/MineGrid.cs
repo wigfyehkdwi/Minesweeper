@@ -7,6 +7,7 @@ public class MineGrid : MonoBehaviour
     public int Height { get; private set; }
     public int Area => Width * Height;
     public int MineCount { get; set; } = 10;
+    public int FlaggedMines { get; internal set; } = 0; // Should ONLY be set within Tile!
 
     public GameObject TilePrefab;
     public Tile[][] Tiles = new Tile[0][];
@@ -20,21 +21,28 @@ public class MineGrid : MonoBehaviour
 
     public bool GameEnded { get; set; }
 
+    public double TimeSinceReset { get; set; }
+
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         rectTransform = GetComponent<RectTransform>();
         Resize(9, 9);
     }
 
     // Update is called once per frame
+    private void Update()
+    {
+        TimeSinceReset += Time.deltaTime;
+    }
+
     public void Resize(int width, int height)
     {
         Width = width;
         Height = height;
 
         UpdateResolution();
-        Reset();
+        ResetGrid();
     }
 
     public void UpdateResolution()
@@ -51,8 +59,11 @@ public class MineGrid : MonoBehaviour
         Screen.SetResolution(resWidth, resHeight, FullScreenMode.Windowed);
     }
 
-    public void Reset()
+    public void ResetGrid()
     {
+        FlaggedMines = 0;
+        TimeSinceReset = 0;
+
         foreach (var tileArray in Tiles) foreach (var tile in tileArray) Destroy(tile); // Remove the old tiles
 
         Tiles = new Tile[Width][];

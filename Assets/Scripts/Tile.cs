@@ -15,6 +15,9 @@ public class Tile : MonoBehaviour, IPointerClickHandler
         get => _state;
         set
         {
+            if (value is States.Flagged) Grid.FlaggedMines++;
+            else if (_state is States.Flagged) Grid.FlaggedMines--;
+
             _state = value;
             UpdateSprite();
         }

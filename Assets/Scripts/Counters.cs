@@ -10,12 +10,13 @@ public class Counters : MonoBehaviour
     private void Update()
     {
         RemainingMinesText.text = Format(Grid.MineCount - Grid.FlaggedMines);
-        TimerText.text = Format((int)Grid.TimeSinceReset);
+        if (!Grid.GameEnded) TimerText.text = Format((int)Grid.TimeSinceReset);
     }
 
     public string Format(int n)
     {
-        return n.ToString().PadLeft(3);
+        if (n < 0) return '-' + n.ToString().Substring(1).PadLeft(2, '0');
+        return n.ToString().PadLeft(3, '0');
     }
 
     public void ResetGrid()

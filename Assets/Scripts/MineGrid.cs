@@ -61,6 +61,7 @@ public class MineGrid : MonoBehaviour
 
     public void ResetGrid()
     {
+        GameEnded = false;
         FlaggedMines = 0;
         TimeSinceReset = 0;
 

@@ -5,12 +5,17 @@ public class UIManager : MonoBehaviour
 {
     public MineGrid Grid;
 
+    // Counters
     public Text RemainingMinesText;
     public Text TimerText;
-    public Button NewGameButton;
 
+    // New game button management
+    public Button NewGameButton;
     public Sprite NewGameSprite;
     public Sprite NewGameDeadSprite;
+
+    // Used to resize the whole UI
+    public RectTransform CountersTransform;
 
     private void Update()
     {
@@ -22,7 +27,6 @@ public class UIManager : MonoBehaviour
 
     public void Resize(int width, int height)
     {
-
     }
 
     public string Format(int n)

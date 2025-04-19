@@ -1,16 +1,28 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Counters : MonoBehaviour
+public class UIManager : MonoBehaviour
 {
     public MineGrid Grid;
+
     public Text RemainingMinesText;
     public Text TimerText;
+    public Button NewGameButton;
+
+    public Sprite NewGameSprite;
+    public Sprite NewGameDeadSprite;
 
     private void Update()
     {
         RemainingMinesText.text = Format(Grid.MineCount - Grid.FlaggedMines);
         if (!Grid.GameEnded) TimerText.text = Format((int)Grid.TimeSinceReset);
+
+        NewGameButton.image.sprite = Grid.GameEnded ? NewGameDeadSprite : NewGameSprite;
+    }
+
+    public void Resize(int width, int height)
+    {
+
     }
 
     public string Format(int n)

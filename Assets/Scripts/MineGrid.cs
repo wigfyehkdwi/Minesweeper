@@ -22,6 +22,7 @@ public class MineGrid : MonoBehaviour
     public bool GameEnded { get; set; }
 
     public double TimeSinceReset { get; set; }
+    public UIManager UI;
 
     // Start is called before the first frame update
     private void Start()
@@ -57,6 +58,7 @@ public class MineGrid : MonoBehaviour
 
         Debug.Log("Updating resolution to " + resWidth + "x" + resHeight);
         Screen.SetResolution(resWidth, resHeight, FullScreenMode.Windowed);
+        UI?.Resize(resWidth, resHeight);
     }
 
     public void ResetGrid()

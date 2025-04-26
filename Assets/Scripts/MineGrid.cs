@@ -6,6 +6,7 @@ public class MineGrid : MonoBehaviour
     public int Width { get; private set; }
     public int Height { get; private set; }
     public int Area => Width * Height;
+    public Modes Mode { get; set; }
     public int MineCount { get; set; } = 10;
     public int FlaggedMines { get; internal set; } = 0; // Should ONLY be set within Tile!
 
@@ -42,23 +43,8 @@ public class MineGrid : MonoBehaviour
         Width = width;
         Height = height;
 
-        UpdateResolution();
+        UI?.HandleResize();
         ResetGrid();
-    }
-
-    public void UpdateResolution()
-    {
-        resWidth = 9 // Left border
-                 + 8 // Right border
-                 + TileWidth * Width; // Tiles (16x16)
-        resHeight = 20 // Toolbar
-                  + 52 // Top UI/border
-                  + 8 // Bottom border
-                  + TileHeight * Height; // Tiles (16x16)
-
-        Debug.Log("Updating resolution to " + resWidth + "x" + resHeight);
-        Screen.SetResolution(resWidth, resHeight, FullScreenMode.Windowed);
-        UI?.Resize(resWidth, resHeight);
     }
 
     public void ResetGrid()
@@ -75,12 +61,9 @@ public class MineGrid : MonoBehaviour
             Tiles[x] = new Tile[Height];
             for (int y = 0; y < Height; y++)
             {
-                var pos = new Vector3(9 + x * TileWidth, 8 + (Height - y - 1) * TileHeight, 0);
-                pos -= rectTransform.localPosition;
-                pos += new Vector3(TileWidth / 2f, TileHeight / 2f, 0);
-                pos -= new Vector3(resWidth / 2f, resHeight / 2f, 0);
+                var pos = new Vector3(x * TileWidth, (Height - y - 1) * TileHeight, 0);
 
-                var tile = (GameObject)Instantiate(TilePrefab, transform);
+                var tile = Instantiate(TilePrefab, transform);
                 tile.GetComponent<RectTransform>().localPosition = pos;
 
                 var tilec = tile.GetComponent<Tile>();
@@ -123,5 +106,13 @@ public class MineGrid : MonoBehaviour
                 else if (tile.State is Tile.States.Flagged) tile.UpdateSprite(); // Show the incorrectly flagged sprite
             }
         }
+    }
+
+    public enum Modes
+    {
+        Beginner,
+        Intermediate,
+        Expert,
+        Custom
     }
 }

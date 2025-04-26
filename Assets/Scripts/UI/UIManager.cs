@@ -16,6 +16,7 @@ public class UIManager : MonoBehaviour
 
     // Used to resize the whole UI
     public RectTransform CountersTransform;
+    public RectTransform MenuBarTransform;
 
     private void Update()
     {
@@ -25,8 +26,27 @@ public class UIManager : MonoBehaviour
         NewGameButton.image.sprite = Grid.GameEnded ? NewGameDeadSprite : NewGameSprite;
     }
 
-    public void Resize(int width, int height)
+    public void HandleResize()
     {
+        int gridWidth = MineGrid.TileWidth * Grid.Width; // Tiles (16x16)
+        int gridHeight = MineGrid.TileHeight * Grid.Height;
+
+        var gridRectTr = Grid.gameObject.GetComponent<RectTransform>();
+        gridRectTr.localPosition = new Vector3(9, 8, 0);
+        gridRectTr.sizeDelta = new Vector2(gridWidth, gridHeight);
+
+        int resWidth = 9 // Left border
+                     + 8 // Right border
+                     + gridWidth;
+        int resHeight = 20 // Toolbar
+                      + 52 // Top UI/border
+                      + 8 // Bottom border
+                      + gridHeight;
+
+        Debug.Log("Updating resolution to " + resWidth + "x" + resHeight);
+        Screen.SetResolution(resWidth, resHeight, FullScreenMode.Windowed);
+
+        MenuBarTransform.localPosition = new Vector3(0, resHeight - MenuBarTransform.sizeDelta.y);
     }
 
     public string Format(int n)

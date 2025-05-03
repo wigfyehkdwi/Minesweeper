@@ -14,7 +14,7 @@ public class UIManager : MonoBehaviour
     public Sprite NewGameSprite;
     public Sprite NewGameDeadSprite;
 
-    // Used to resize the whole UI
+    public RectTransform UITransform;
     public RectTransform CountersTransform;
     public RectTransform MenuBarTransform;
 
@@ -28,12 +28,8 @@ public class UIManager : MonoBehaviour
 
     public void HandleResize()
     {
-        int gridWidth = MineGrid.TileWidth * Grid.Width; // Tiles (16x16)
+        int gridWidth = MineGrid.TileWidth * Grid.Width;
         int gridHeight = MineGrid.TileHeight * Grid.Height;
-
-        var gridRectTr = Grid.gameObject.GetComponent<RectTransform>();
-        gridRectTr.localPosition = new Vector3(9, 8, 0);
-        gridRectTr.sizeDelta = new Vector2(gridWidth, gridHeight);
 
         int resWidth = 9 // Left border
                      + 8 // Right border
@@ -46,7 +42,16 @@ public class UIManager : MonoBehaviour
         Debug.Log("Updating resolution to " + resWidth + "x" + resHeight);
         Screen.SetResolution(resWidth, resHeight, FullScreenMode.Windowed);
 
-        MenuBarTransform.localPosition = new Vector3(0, resHeight - MenuBarTransform.sizeDelta.y);
+        var gridRectTr = Grid.gameObject.GetComponent<RectTransform>();
+        gridRectTr.position = new Vector3(9, 8, 0);
+        gridRectTr.sizeDelta = new Vector2(gridWidth, gridHeight);
+
+        UITransform.sizeDelta = new Vector2(resWidth, resHeight);
+
+        MenuBarTransform.position = new Vector3(0, resHeight - MenuBarTransform.sizeDelta.y);
+        MenuBarTransform.sizeDelta = new Vector2(resWidth, MenuBarTransform.sizeDelta.y);
+
+        CountersTransform.position = new Vector3(0, gridHeight - 14);
     }
 
     public string Format(int n)

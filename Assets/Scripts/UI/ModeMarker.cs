@@ -2,17 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ModeMarker : MonoBehaviour
+public class ModeMarker : OptionMarker
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public MineGrid Grid;
+    public RectTransform[] ModeOptions;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public override RectTransform Target => ModeOptions[(int)Grid.Mode];
 }

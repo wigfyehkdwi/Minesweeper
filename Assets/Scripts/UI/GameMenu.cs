@@ -5,7 +5,7 @@ public class GameMenu : Menu
     public MineGrid Grid;
     public GameObject CustomGridWindow;
 
-    public void NewOption()
+    public void NewGameOption()
     {
         Collapse();
         Grid.ResetGrid();

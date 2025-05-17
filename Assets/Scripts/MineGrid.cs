@@ -53,7 +53,7 @@ public class MineGrid : MonoBehaviour
         FlaggedMines = 0;
         TimeSinceReset = 0;
 
-        foreach (var tileArray in Tiles) foreach (var tile in tileArray) Destroy(tile); // Remove the old tiles
+        foreach (var tileArray in Tiles) foreach (var tile in tileArray) Destroy(tile.gameObject); // Remove the old tiles
 
         Tiles = new Tile[Width][];
         for (int x = 0; x < Width; x++)

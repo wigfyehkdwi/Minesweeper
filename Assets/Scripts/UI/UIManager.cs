@@ -42,13 +42,13 @@ public class UIManager : MonoBehaviour
         Debug.Log("Updating resolution to " + resWidth + "x" + resHeight);
         Screen.SetResolution(resWidth, resHeight, FullScreenMode.Windowed);
 
-        var gridRectTr = Grid.gameObject.GetComponent<RectTransform>();
-        gridRectTr.position = new Vector3(9, 8, 0);
-        gridRectTr.sizeDelta = new Vector2(gridWidth, gridHeight);
+        var gridRectTransform = Grid.gameObject.GetComponent<RectTransform>();
+        gridRectTransform.position = new Vector3(9, 8, 0);
+        gridRectTransform.sizeDelta = new Vector2(gridWidth, gridHeight);
 
         UITransform.sizeDelta = new Vector2(resWidth, resHeight);
         
-        MenuBarTransform.position = new Vector3(0, resHeight - MenuBarTransform.sizeDelta.y);
+        MenuBarTransform.anchoredPosition = new Vector3(0, resHeight - MenuBarTransform.sizeDelta.y);
         MenuBarTransform.sizeDelta = new Vector2(resWidth, MenuBarTransform.sizeDelta.y);
 
         CountersTransform.anchoredPosition = new Vector3(0, gridHeight - 14);

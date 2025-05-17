@@ -24,6 +24,7 @@ public class Tile : MonoBehaviour, IPointerClickHandler
     }
     public bool IsClearable => State is States.Unchecked or States.Unknown;
     public bool IsClear => State is States.Clear or States.Exploded;
+    public bool WasHit { get; set; }
 
     public Sprite TileSprite;
     public Sprite FlaggedTileSprite;
@@ -31,6 +32,7 @@ public class Tile : MonoBehaviour, IPointerClickHandler
     public Sprite ClearTileSprite;
     public Sprite MineTileSprite;
     public Sprite FalseMineTileSprite;
+    public Sprite HitMineTileSprite;
 
     public Text adjacentMineText;
     private Image _image;
@@ -50,6 +52,7 @@ public class Tile : MonoBehaviour, IPointerClickHandler
             case PointerEventData.InputButton.Left:
                 if (IsClearable)
                 {
+                    WasHit = true;
                     if (IsMine) Grid.ExplodeMines();
                     else Clear();
                 }
@@ -127,7 +130,7 @@ public class Tile : MonoBehaviour, IPointerClickHandler
                 sprite = ClearTileSprite;
                 break;
             case States.Exploded:
-                sprite = MineTileSprite;
+                sprite = WasHit ? HitMineTileSprite : MineTileSprite;
                 break;
         }
 

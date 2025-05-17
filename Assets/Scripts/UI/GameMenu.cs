@@ -32,7 +32,7 @@ public class GameMenu : Menu
         Collapse();
         Grid.Mode = MineGrid.Modes.Expert;
         Grid.MineCount = 99;
-        Grid.Resize(16, 30);
+        Grid.Resize(30, 16);
     }
 
     public void CustomOption()

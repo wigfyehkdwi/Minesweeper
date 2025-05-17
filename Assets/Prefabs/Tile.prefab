@@ -141,6 +141,7 @@ MonoBehaviour:
   ClearTileSprite: {fileID: 21300000, guid: e7ee1d71fbcfe524699ae548f173e161, type: 3}
   MineTileSprite: {fileID: 21300000, guid: a565cad08e9a9444397483700860a2f5, type: 3}
   FalseMineTileSprite: {fileID: 21300000, guid: 2ce5c0d4010b01745b6ed5cc9d4b48fa, type: 3}
+  HitMineTileSprite: {fileID: 21300000, guid: 4ec4872a692c36c4098252afe581c82c, type: 3}
   adjacentMineText: {fileID: 1387954369271815804}
 --- !u!1 &9062412047296629522
 GameObject:

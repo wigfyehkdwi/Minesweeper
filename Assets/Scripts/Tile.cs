@@ -137,6 +137,20 @@ public class Tile : MonoBehaviour, IPointerClickHandler
         if (sprite != null) _image.sprite = sprite;
     }
 
+    // Currently uses 4 bits
+    public byte Serialize()
+    {
+        int state = (int)_state;
+        int mineBit = IsMine ? 8 : 0;
+        return (byte)(state | mineBit);
+    }
+
+    public void Deserialize(byte data)
+    {
+        State = (States)(data & 7);
+        IsMine = (data & 8) != 0;
+    }
+
     public enum States
     {
         Unchecked,

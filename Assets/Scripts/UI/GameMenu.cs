@@ -14,30 +14,36 @@ public class GameMenu : Menu
     public void BeginnerOption()
     {
         Collapse();
-        Grid.Mode = MineGrid.Modes.Beginner;
-        Grid.MineCount = 10;
-        Grid.Resize(9, 9);
+        Grid.SetMode(MineGrid.Modes.Beginner);
     }
 
     public void IntermediateOption()
     {
         Collapse();
-        Grid.Mode = MineGrid.Modes.Intermediate;
-        Grid.MineCount = 40;
-        Grid.Resize(16, 16);
+        Grid.SetMode(MineGrid.Modes.Intermediate);
     }
 
     public void ExpertOption()
     {
         Collapse();
-        Grid.Mode = MineGrid.Modes.Expert;
-        Grid.MineCount = 99;
-        Grid.Resize(30, 16);
+        Grid.SetMode(MineGrid.Modes.Expert);
     }
 
     public void CustomOption()
     {
         Collapse();
         CustomGridWindow.SetActive(true);
+    }
+
+    public void SaveOption()
+    {
+        Collapse();
+        Grid.SaveGame();
+    }
+
+    public void LoadOption()
+    {
+        Collapse();
+        Grid.LoadGame();
     }
 }

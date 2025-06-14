@@ -1,5 +1,7 @@
 using System;
 using UnityEngine;
+using System.IO;
+using System.Windows.Forms;
 
 public class MineGrid : MonoBehaviour
 {
@@ -26,8 +28,6 @@ public class MineGrid : MonoBehaviour
     public double TimeSinceReset { get; set; }
     public UIManager UI;
 
-    public const int HeaderSize = 2 + 2; // width + height
-
     // Start is called before the first frame update
     private void Start()
     {
@@ -48,6 +48,29 @@ public class MineGrid : MonoBehaviour
 
         UI?.HandleResize();
         ResetGrid();
+    }
+
+    public void SetMode(Modes mode)
+    {
+        int width = 9;
+        int height = 9;
+        int mines = 10;
+
+        switch (mode)
+        {
+            case Modes.Intermediate:
+                width = height = 16;
+                mines = 40;
+                break;
+            case Modes.Expert:
+                width = 30;
+                height = 16;
+                mines = 99;
+                break;
+        }
+        Mode = mode;
+        MineCount = mines;
+        Resize(width, height);
     }
 
     public void ResetGrid()
@@ -113,27 +136,98 @@ public class MineGrid : MonoBehaviour
 
     public byte[] Serialize()
     {
-        byte[] data = new byte[HeaderSize + (Tiles.Length + 1)/2];
-        for (int i = 0; i < TilesFlat.Length; i += 2)
-        {
-            byte tilePair = TilesFlat[i].Serialize() << 4;
-            if (i + 1 != TilesFlat.Length) tilePair |= TilesFlat[i + 1].Serialize();
+        byte[] data = new byte[1 + (Mode == Modes.Custom ? 1 + 2 + 2 : 0) + (Tiles.Length + 1)/2];
+        int i = 0;
 
-            data[i / 2 + HeaderSize] = tilePair;
+        data[i++] = (byte)Mode;
+        if (Mode == Modes.Custom)
+        {
+            data[i++] = (byte)MineCount;
+            data[i++] = (byte)((Width >> 8) & 255);
+            data[i++] = (byte)(Width & 255);
+            data[i++] = (byte)((Height >> 8) & 255);
+            data[i++] = (byte)(Height & 255);
+        }
+
+        for (int j = 0; j < TilesFlat.Length; j += 2)
+        {
+            int tilePair = TilesFlat[j].Serialize() << 4;
+            if (j + 1 != TilesFlat.Length) tilePair |= TilesFlat[j + 1].Serialize();
+
+            data[i++] = (byte)tilePair;
         }
         return data;
     }
 
     public void Deserialize(byte[] data)
     {
-        Resize((data[0] << 8) | data[1], (data[2] << 8) | data[3]);
+        int i = 0;
 
-        for (int i = 0; i < TilesFlat.Length; i += 2)
+        Mode = (Modes)data[i++];
+        if (Mode == Modes.Custom)
         {
-            byte tilePair = data[i/2 + HeaderSize];
+            MineCount = data[i++];
+            Resize((data[i++] << 8) | data[i++], (data[i++] << 8) | data[i++]);
+        }
+        else
+        {
+            SetMode(Mode);
+        }
 
-            TilesFlat[i].Deserialize((byte)(tilePair >> 4));
-            if (i + 1 != TilesFlat.Length) TilesFlat[i + 1].Deserialize((byte)(tilePair & 15));
+        for (int j = 0; j < TilesFlat.Length; j += 2)
+        {
+            byte tilePair = data[i++];
+
+            TilesFlat[j].Deserialize((byte)(tilePair >> 4));
+            if (j + 1 != TilesFlat.Length) TilesFlat[j + 1].Deserialize((byte)(tilePair & 15));
+        }
+
+        // Recalculate adjacents
+        for (int h = 0; h < TilesFlat.Length; h++)
+        {
+            var tile = TilesFlat[h];
+
+            var adjacentTiles = tile.GetAdjacentTiles();
+            int adjacentMines = 0;
+            foreach (var tile2 in adjacentTiles) if (tile2.IsMine) adjacentMines++;
+
+            if (adjacentMines != 0)
+            {
+                tile.adjacentMineText.text = adjacentMines.ToString();
+                tile.adjacentMineText.gameObject.SetActive(true);
+            }
+        }
+    }
+
+    public void SaveGame()
+    {
+        var dialog = new SaveFileDialog();
+        dialog.RestoreDirectory = true;
+
+        Stream stream;
+        if (dialog.ShowDialog() == DialogResult.OK && (stream = dialog.OpenFile()) != null)
+        {
+            using (stream)
+            {
+                stream.Write(Serialize());
+            }
+        }
+    }
+
+    public void LoadGame()
+    {
+        var dialog = new OpenFileDialog();
+        dialog.RestoreDirectory = true;
+
+        Stream stream;
+        if (dialog.ShowDialog() == DialogResult.OK && (stream = dialog.OpenFile()) != null)
+        {
+            using (stream)
+            {
+                byte[] data = new byte[stream.Length];
+                stream.Read(data, 0, (int)stream.Length);
+                Deserialize(data);
+            }
         }
     }
 

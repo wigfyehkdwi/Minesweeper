@@ -136,8 +136,12 @@ public class MineGrid : MonoBehaviour
 
     public byte[] Serialize()
     {
-        byte[] data = new byte[1 + (Mode == Modes.Custom ? 1 + 2 + 2 : 0) + (Tiles.Length + 1)/2];
+        byte[] data = new byte[2 + 1 + (Mode == Modes.Custom ? 1 + 2 + 2 : 0) + (Tiles.Length + 1)/2];
         int i = 0;
+
+        int timeSinceReset = (int)TimeSinceReset;
+        data[i++] = (byte)timeSinceReset;
+        data[i++] = (byte)((timeSinceReset >> 8) & 255);
 
         data[i++] = (byte)Mode;
         if (Mode == Modes.Custom)
@@ -163,6 +167,8 @@ public class MineGrid : MonoBehaviour
     {
         int i = 0;
 
+        int timeSinceReset = (data[i++] << 8) | data[i++];
+
         Mode = (Modes)data[i++];
         if (Mode == Modes.Custom)
         {
@@ -174,6 +180,8 @@ public class MineGrid : MonoBehaviour
             SetMode(Mode);
         }
 
+        TimeSinceReset = timeSinceReset;
+
         for (int j = 0; j < TilesFlat.Length; j += 2)
         {
             byte tilePair = data[i++];
@@ -182,10 +190,13 @@ public class MineGrid : MonoBehaviour
             if (j + 1 != TilesFlat.Length) TilesFlat[j + 1].Deserialize((byte)(tilePair & 15));
         }
 
-        // Recalculate adjacents
+        // Recalculate adjacents and FlaggedMines
+        FlaggedMines = 0;
         for (int h = 0; h < TilesFlat.Length; h++)
         {
             var tile = TilesFlat[h];
+
+            if (tile.IsMine && tile.State == Tile.States.Flagged) FlaggedMines++;
 
             var adjacentTiles = tile.GetAdjacentTiles();
             int adjacentMines = 0;

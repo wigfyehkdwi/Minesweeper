@@ -9,14 +9,23 @@ public class FastestTimeWindow : Window
 
     public MineGrid Grid;
 
+    private string Mode;
+    private int Time;
+
     private void OnEnable()
     {
-        NameLabel.text = "You have the fastest time for " + Grid.Mode.ToString().ToLowerInvariant() + " level. Please enter your name.";
+        Mode = Grid.Mode.ToString();
+        Time = (int)Grid.TimeSinceReset;
+        NameLabel.text = "You have the fastest time for " + Mode.ToLowerInvariant() + " level. Please enter your name.";
     }
 
     public void OkButton()
     {
         string name = string.IsNullOrEmpty(NameField.text) ? "Anonymous" : NameField.text;
+        PlayerPrefs.SetInt(Grid.Mode.ToString() + ".time", Time);
+        PlayerPrefs.SetString(Grid.Mode.ToString() + ".name", Name);
 
+        FastestMineSweepers.gameObject.SetActive(true);
+        Close();
     }
 }

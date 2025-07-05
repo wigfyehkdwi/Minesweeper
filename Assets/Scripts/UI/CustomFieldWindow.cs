@@ -8,6 +8,8 @@ public class CustomFieldWindow : Window
     public InputField GridHeightField;
     public InputField MineCountField;
 
+    public Window FastestMineSweepers;
+
     public MineGrid Grid;
 
     public void OkButton()

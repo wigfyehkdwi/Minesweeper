@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,6 +7,7 @@ public class FastestTimeWindow : Window
 {
     public Text NameLabel;
     public InputField NameField;
+    public Window FastestMineSweepers;
 
     public MineGrid Grid;
 
@@ -15,7 +17,7 @@ public class FastestTimeWindow : Window
     private void OnEnable()
     {
         Mode = Grid.Mode.ToString();
-        Time = (int)Grid.TimeSinceReset;
+        Time = Math.Clamp((int)Grid.TimeSinceReset, 0, 999);
         NameLabel.text = "You have the fastest time for " + Mode.ToLowerInvariant() + " level. Please enter your name.";
     }
 
@@ -23,7 +25,7 @@ public class FastestTimeWindow : Window
     {
         string name = string.IsNullOrEmpty(NameField.text) ? "Anonymous" : NameField.text;
         PlayerPrefs.SetInt(Grid.Mode.ToString() + ".time", Time);
-        PlayerPrefs.SetString(Grid.Mode.ToString() + ".name", Name);
+        PlayerPrefs.SetString(Grid.Mode.ToString() + ".name", name);
 
         FastestMineSweepers.gameObject.SetActive(true);
         Close();

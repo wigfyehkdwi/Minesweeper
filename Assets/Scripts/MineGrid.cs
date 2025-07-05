@@ -38,7 +38,7 @@ public class MineGrid : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        TimeSinceReset += Time.deltaTime;
+        if (!GameEnded) TimeSinceReset += Time.deltaTime;
     }
 
     public void Resize(int width, int height)
@@ -132,6 +132,21 @@ public class MineGrid : MonoBehaviour
             if (tile.IsMine && tile.State is not Tile.States.Flagged) tile.Explode();
             else if (tile.State is Tile.States.Flagged) tile.UpdateSprite(); // Show the incorrectly flagged sprite
         }
+    }
+
+    public void CheckWin()
+    {
+        if (FlaggedMines == MineCount) return; // fast check
+
+        for (int i = 0; i < TilesFlat.Length; i++) // slow check
+        {
+            var tile = TilesFlat[i];
+            if (!(tile.IsMine ? tile.State == Tile.States.Flagged : tile.IsClear)) return;
+        }
+
+        // well, we won
+        GameEnded = true;
+        UI?.HandleWin();
     }
 
     public byte[] Serialize()

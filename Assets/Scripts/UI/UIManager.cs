@@ -18,6 +18,9 @@ public class UIManager : MonoBehaviour
     public RectTransform CountersTransform;
     public RectTransform MenuBarTransform;
 
+    // winning
+    public Window FastestTime;
+
     private void Update()
     {
         RemainingMinesText.text = Format(Grid.MineCount - Grid.FlaggedMines);
@@ -54,7 +57,13 @@ public class UIManager : MonoBehaviour
         CountersTransform.anchoredPosition = new Vector3(0, gridHeight - 14);
     }
 
-    public string Format(int n)
+    public void HandleWin()
+    {
+        string key = Grid.Mode.ToString() + ".time";
+        if (PlayerPrefs.HasKey(key) && (int)Grid.TimeSinceReset > PlayerPrefs.GetInt(key)) FastestTime.gameObject.SetActive(true);
+    }
+
+    public static string Format(int n)
     {
         if (n < 0) return '-' + n.ToString().Substring(1).PadLeft(2, '0');
         return n.ToString().PadLeft(3, '0');

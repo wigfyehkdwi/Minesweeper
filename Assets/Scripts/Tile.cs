@@ -54,7 +54,11 @@ public class Tile : MonoBehaviour, IPointerClickHandler
                 {
                     WasHit = true;
                     if (IsMine) Grid.ExplodeMines();
-                    else Clear();
+                    else
+                    {
+                        Clear();
+                        Grid.CheckWin();
+                    }
                 }
                 break;
             case PointerEventData.InputButton.Right:

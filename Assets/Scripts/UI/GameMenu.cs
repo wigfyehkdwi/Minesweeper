@@ -3,7 +3,7 @@ using UnityEngine;
 public class GameMenu : Menu
 {
     public MineGrid Grid;
-    public GameObject CustomGridWindow;
+    public Window CustomGridWindow;
 
     public void NewGameOption()
     {
@@ -32,7 +32,7 @@ public class GameMenu : Menu
     public void CustomOption()
     {
         Collapse();
-        CustomGridWindow.SetActive(true);
+        CustomGridWindow.gameObject.SetActive(true);
     }
 
     public void SaveOption()

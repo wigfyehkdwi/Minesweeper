@@ -23,9 +23,11 @@ public class FastestTimeWindow : Window
 
     public void OkButton()
     {
+        string modeName = Grid.Mode.ToString();
         string name = string.IsNullOrEmpty(NameField.text) ? "Anonymous" : NameField.text;
-        PlayerPrefs.SetInt(Grid.Mode.ToString() + ".time", Time);
-        PlayerPrefs.SetString(Grid.Mode.ToString() + ".name", name);
+        
+        PlayerPrefs.SetInt(modeName + ".time", Time);
+        PlayerPrefs.SetString(modeName + ".name", name);
 
         FastestMineSweepers.gameObject.SetActive(true);
         Close();

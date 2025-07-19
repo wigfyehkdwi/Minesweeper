@@ -21,8 +21,8 @@ public class FastestMineSweepersWindow : Window
         ExpertTime.text = GetTime(MineGrid.Modes.Expert) + " seconds";
 
         BeginnerName.text = GetName(MineGrid.Modes.Beginner);
-        BeginnerName.text = GetName(MineGrid.Modes.Intermediate);
-        BeginnerName.text = GetName(MineGrid.Modes.Expert);
+        IntermediateName.text = GetName(MineGrid.Modes.Intermediate);
+        ExpertName.text = GetName(MineGrid.Modes.Expert);
     }
 
     public void OnEnable()
@@ -47,7 +47,7 @@ public class FastestMineSweepersWindow : Window
     private string GetName(MineGrid.Modes mode)
     {
         string key = mode.ToString() + ".name";
-
+        
         if (PlayerPrefs.HasKey(key)) return PlayerPrefs.GetString(key);
         return "Anonymous";
     }

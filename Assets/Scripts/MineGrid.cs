@@ -23,7 +23,7 @@ public class MineGrid : MonoBehaviour
     private int resWidth;
     private int resHeight;
 
-    public bool GameEnded { get; set; }
+    public States State { get; set; }
 
     public double TimeSinceReset { get; set; }
     public UIManager UI;
@@ -38,7 +38,7 @@ public class MineGrid : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        if (!GameEnded) TimeSinceReset += Time.deltaTime;
+        if (State == States.Play) TimeSinceReset += Time.deltaTime;
     }
 
     public void Resize(int width, int height)
@@ -75,7 +75,7 @@ public class MineGrid : MonoBehaviour
 
     public void ResetGrid()
     {
-        GameEnded = false;
+        State = States.Play;
         FlaggedMines = 0;
         TimeSinceReset = 0;
 
@@ -123,7 +123,7 @@ public class MineGrid : MonoBehaviour
 
     public void ExplodeMines()
     {
-        GameEnded = true;
+        State = States.Lose;
 
         for (int i = 0; i < TilesFlat.Length; i++)
         {
@@ -145,7 +145,7 @@ public class MineGrid : MonoBehaviour
         }
 
         // well, we won
-        GameEnded = true;
+        State = States.Win;
         UI?.HandleWin();
     }
 
@@ -263,5 +263,12 @@ public class MineGrid : MonoBehaviour
         Intermediate,
         Expert,
         Custom
+    }
+
+    public enum States
+    {
+        Play,
+        Win,
+        Lose
     }
 }

@@ -13,6 +13,7 @@ public class UIManager : MonoBehaviour
     public Button NewGameButton;
     public Sprite NewGameSprite;
     public Sprite NewGameDeadSprite;
+    public Sprite NewGameWonSprite;
 
     public RectTransform UITransform;
     public RectTransform CountersTransform;
@@ -24,9 +25,20 @@ public class UIManager : MonoBehaviour
     private void Update()
     {
         RemainingMinesText.text = Format(Grid.MineCount - Grid.FlaggedMines);
-        if (!Grid.GameEnded) TimerText.text = Format((int)Grid.TimeSinceReset);
+        if (Grid.State == MineGrid.States.Play) TimerText.text = Format((int)Grid.TimeSinceReset);
 
-        NewGameButton.image.sprite = Grid.GameEnded ? NewGameDeadSprite : NewGameSprite;
+        switch (Grid.State)
+        {
+            case MineGrid.States.Play:
+                NewGameButton.image.sprite = NewGameSprite;
+                break;
+            case MineGrid.States.Win:
+                NewGameButton.image.sprite = NewGameWonSprite;
+                break;
+            case MineGrid.States.Lose:
+                NewGameButton.image.sprite = NewGameDeadSprite;
+                break;
+        }
     }
 
     public void HandleResize()

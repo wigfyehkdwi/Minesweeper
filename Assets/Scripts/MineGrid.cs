@@ -151,7 +151,7 @@ public class MineGrid : MonoBehaviour
 
     public byte[] Serialize()
     {
-        byte[] data = new byte[2 + 1 + (Mode == Modes.Custom ? 1 + 2 + 2 : 0) + (Tiles.Length + 1)/2];
+        byte[] data = new byte[2 + 1 + (Mode == Modes.Custom ? 1 + 2 + 2 : 0) + (TilesFlat.Length + 1)/2];
         int i = 0;
 
         int timeSinceReset = (int)TimeSinceReset;

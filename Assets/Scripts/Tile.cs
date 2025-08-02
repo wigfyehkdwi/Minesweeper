@@ -45,7 +45,7 @@ public class Tile : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (Grid.GameEnded) return;
+        if (Grid.State != MineGrid.States.Play) return;
 
         switch (eventData.button)
         {
@@ -125,7 +125,7 @@ public class Tile : MonoBehaviour, IPointerClickHandler
                 sprite = TileSprite;
                 break;
             case States.Flagged:
-                sprite = (IsMine || !Grid.GameEnded) ? FlaggedTileSprite : FalseMineTileSprite;
+                sprite = (IsMine || Grid.State == MineGrid.States.Play) ? FlaggedTileSprite : FalseMineTileSprite;
                 break;
             case States.Unknown:
                 sprite = UnknownTileSprite;

@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using UnityEngine.UI;
 
@@ -13,29 +14,45 @@ public class SaveLoadWindow : Window
 
     public void OkButton()
     {
-        string path = PathLabel.text;
+        string path = PathField.text;
+
+        FileStream file = null;
+        var info = new FileInfo(path);
         try
         {
             if (Loading)
             {
-                var info = new FileInfo(path);
-                var file = info.OpenRead();
+                file = info.OpenRead();
                 byte[] data = new byte[info.Length];
                 file.Read(data);
                 Grid.Deserialize(data);
             }
             else
             {
+                if (info.Exists) {
+                    PathLabel.text = "The file already exists!"; // to prevent accidental overwrites
+                    return;
+                }
+
                 byte[] data = Grid.Serialize();
-                var file = File.Create(path);
+                file = info.Create();
                 file.Write(data);
             }
+            file.Flush();
+            Close();
         }
-        catch (IOException ex)
+        catch (Exception ex)
         {
             PathLabel.text = ex.Message;
         }
-        Close();
+        try
+        {
+            file?.Dispose();
+        }
+        catch (Exception ex)
+        {
+            PathLabel.text = ex.Message;
+        }
     }
 
     public int Parse(InputField field, int def)

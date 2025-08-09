@@ -5,12 +5,27 @@ using UnityEngine.UI;
 
 public class SaveLoadWindow : Window
 {
-    public bool Loading { get; set; }
+    public bool Loading;
 
+    public Text Titlebar;
     public Text PathLabel;
     public InputField PathField;
 
     public MineGrid Grid;
+
+    private void OnEnable()
+    {
+        if (Loading)
+        {
+            Titlebar.text = "Save game";
+            PathLabel.text = "Enter the path to save to...";
+        }
+        else
+        {
+            Titlebar.text = "Load game";
+            PathLabel.text = "Enter the path to load from...";
+        }
+    }
 
     public void OkButton()
     {

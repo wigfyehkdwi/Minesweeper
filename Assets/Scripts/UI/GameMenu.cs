@@ -4,6 +4,7 @@ public class GameMenu : Menu
 {
     public MineGrid Grid;
     public Window CustomGridWindow;
+    public SaveLoadWindow SaveLoadWindow;
 
     public void NewGameOption()
     {
@@ -38,12 +39,14 @@ public class GameMenu : Menu
     public void SaveOption()
     {
         Collapse();
-        Grid.SaveGame();
+        SaveLoadWindow.Loading = false;
+        SaveLoadWindow.gameObject.SetActive(true);
     }
 
     public void LoadOption()
     {
         Collapse();
-        Grid.LoadGame();
+        SaveLoadWindow.Loading = true;
+        SaveLoadWindow.gameObject.SetActive(true);
     }
 }

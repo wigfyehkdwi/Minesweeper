@@ -323,7 +323,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &52229000
 RectTransform:
   m_ObjectHideFlags: 0
@@ -401,6 +401,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DestroyOnClose: 0
+  Loading: 0
+  Titlebar: {fileID: 0}
   PathLabel: {fileID: 2031665563}
   PathField: {fileID: 371524573}
   Grid: {fileID: 1696944352}
@@ -621,7 +623,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 52229004}
         m_TargetAssemblyTypeName: Window, Assembly-CSharp
         m_MethodName: Close
         m_Mode: 1
@@ -1287,6 +1289,7 @@ MonoBehaviour:
   Options: {fileID: 245079361}
   Grid: {fileID: 1696944352}
   CustomGridWindow: {fileID: 1888380978}
+  SaveLoadWindow: {fileID: 52229004}
 --- !u!1 &292079072
 GameObject:
   m_ObjectHideFlags: 0
@@ -1629,7 +1632,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Save/Load Game
+  m_Text: Save game
 --- !u!222 &332239299
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -6878,7 +6881,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Enter the path to load from...
+  m_Text: Enter the path to save to...
 --- !u!222 &2031665564
 CanvasRenderer:
   m_ObjectHideFlags: 0

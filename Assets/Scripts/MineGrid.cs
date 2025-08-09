@@ -136,7 +136,7 @@ public class MineGrid : MonoBehaviour
 
     public void CheckWin()
     {
-        if (FlaggedMines == MineCount) return; // fast check
+        if (State != States.Play || FlaggedMines == MineCount) return; // fast check
 
         for (int i = 0; i < TilesFlat.Length; i++) // slow check
         {
@@ -155,8 +155,8 @@ public class MineGrid : MonoBehaviour
         int i = 0;
 
         int timeSinceReset = (int)TimeSinceReset;
-        data[i++] = (byte)timeSinceReset;
         data[i++] = (byte)((timeSinceReset >> 8) & 255);
+        data[i++] = (byte)timeSinceReset;
 
         data[i++] = (byte)Mode;
         if (Mode == Modes.Custom)
@@ -181,6 +181,7 @@ public class MineGrid : MonoBehaviour
     public void Deserialize(byte[] data)
     {
         int i = 0;
+        int j;
 
         int timeSinceReset = (data[i++] << 8) | data[i++];
 
@@ -197,7 +198,7 @@ public class MineGrid : MonoBehaviour
 
         TimeSinceReset = timeSinceReset;
 
-        for (int j = 0; j < TilesFlat.Length; j += 2)
+        for (j = 0; j < TilesFlat.Length; j += 2)
         {
             byte tilePair = data[i++];
 
@@ -205,27 +206,43 @@ public class MineGrid : MonoBehaviour
             if (j + 1 != TilesFlat.Length) TilesFlat[j + 1].Deserialize((byte)(tilePair & 15));
         }
 
+        // Check for a loss (so we can mark falsely flagged mines)
+        for (j = 0; j < TilesFlat.Length; j++)
+        {
+            var tile = TilesFlat[j];
+            if (tile.IsMine && tile.State == Tile.States.Exploded)
+            {
+                State = States.Lose;
+            }
+        }
+
         // Recalculate adjacents and FlaggedMines
         FlaggedMines = 0;
-        for (int h = 0; h < TilesFlat.Length; h++)
+        for (j = 0; j < TilesFlat.Length; j++)
         {
-            var tile = TilesFlat[h];
+            var tile = TilesFlat[j];
 
             if (tile.IsMine && tile.State == Tile.States.Flagged) FlaggedMines++;
 
-            var adjacentTiles = tile.GetAdjacentTiles();
-            int adjacentMines = 0;
-            foreach (var tile2 in adjacentTiles) if (tile2.IsMine) adjacentMines++;
+            if (tile.State == Tile.States.Flagged && State == States.Lose) tile.UpdateSprite();
 
-            if (adjacentMines != 0)
+            if (tile.IsClear)
             {
-                tile.adjacentMineText.text = adjacentMines.ToString();
-                tile.adjacentMineText.gameObject.SetActive(true);
+                var adjacentTiles = tile.GetAdjacentTiles();
+                int adjacentMines = 0;
+                foreach (var tile2 in adjacentTiles) if (tile2.IsMine) adjacentMines++;
+
+                if (adjacentMines != 0)
+                {
+                    tile.adjacentMineText.text = adjacentMines.ToString();
+                    tile.adjacentMineText.gameObject.SetActive(true);
+                }
             }
         }
+        CheckWin();
     }
 
-    public void SaveGame()
+    /*public void SaveGame()
     {
         var dialog = new SaveFileDialog();
         dialog.RestoreDirectory = true;
@@ -255,7 +272,7 @@ public class MineGrid : MonoBehaviour
                 Deserialize(data);
             }
         }
-    }
+    }*/
 
     public enum Modes
     {

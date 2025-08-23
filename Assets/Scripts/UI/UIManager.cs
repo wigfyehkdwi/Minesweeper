@@ -72,7 +72,7 @@ public class UIManager : MonoBehaviour
     public void HandleWin()
     {
         string key = Grid.Mode.ToString() + ".time";
-        if (PlayerPrefs.HasKey(key) && (int)Grid.TimeSinceReset > PlayerPrefs.GetInt(key)) FastestTime.gameObject.SetActive(true);
+        if (Grid.Mode != MineGrid.Modes.Custom && (!PlayerPrefs.HasKey(key) || (int)Grid.TimeSinceReset > PlayerPrefs.GetInt(key))) FastestTime.gameObject.SetActive(true);
     }
 
     public static string Format(int n)

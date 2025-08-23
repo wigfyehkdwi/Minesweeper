@@ -8,7 +8,7 @@ public class Tile : MonoBehaviour, IPointerClickHandler
 {
     public MineGrid Grid { get; set; }
     public Vector2Int GridPos { get; set; } = Vector2Int.zero;
-    public bool IsMine { get; set; }
+    public bool IsMine;
     private States _state;
     public States State
     {
@@ -24,7 +24,7 @@ public class Tile : MonoBehaviour, IPointerClickHandler
     }
     public bool IsClearable => State is States.Unchecked or States.Unknown;
     public bool IsClear => State is States.Clear or States.Exploded;
-    public bool WasHit { get; set; }
+    public bool WasHit;
 
     public Sprite TileSprite;
     public Sprite FlaggedTileSprite;
@@ -100,6 +100,7 @@ public class Tile : MonoBehaviour, IPointerClickHandler
     public void AlterState()
     {
         State = (States)(((int)State + 1) % 3);
+        Grid.CheckWin();
     }
 
     public List<Tile> GetAdjacentTiles()

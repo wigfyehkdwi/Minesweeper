@@ -45,19 +45,20 @@ public class UIManager : MonoBehaviour
 
     public void HandleResize()
     {
-        var scaleSqrt = Mathf.Sqrt(UIScale);
         var scaleVec = Vector3.one * UIScale;
 
-        var gridWidth = MineGrid.TileWidth * Grid.Width * scaleSqrt;
-        var gridHeight = MineGrid.TileHeight * Grid.Height * scaleSqrt;
+        var gridWidth = MineGrid.TileWidth * Grid.Width;
+        var gridHeight = MineGrid.TileHeight * Grid.Height;
 
-        float resWidth = 9 // Left border
+        float resWidth = (9 // Left border
                      + 8 // Right border
-                     + gridWidth;
-        float resHeight = 20 // Toolbar
+                     + gridWidth)
+                     * UIScale;
+        float resHeight = (20 // Toolbar
                       + 52 // Top UI/border
                       + 8 // Bottom border
-                      + gridHeight;
+                      + gridHeight)
+                      * UIScale;
 
         Debug.Log("Updating resolution to " + (int)resWidth + "x" + (int)resHeight);
         Screen.SetResolution((int)resWidth, (int)resHeight, FullScreenMode.Windowed);
@@ -74,7 +75,7 @@ public class UIManager : MonoBehaviour
         MenuBarTransform.anchoredPosition = new Vector3(0, resHeight - MenuBarTransform.sizeDelta.y);
         MenuBarTransform.sizeDelta = new Vector2(resWidth, MenuBarTransform.sizeDelta.y);
 
-        CountersTransform.anchoredPosition = new Vector3(0, gridHeight/scaleSqrt - 14);
+        CountersTransform.anchoredPosition = new Vector3(0, gridHeight - 14);
     }
 
     public void HandleWin()

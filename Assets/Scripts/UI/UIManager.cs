@@ -22,6 +22,8 @@ public class UIManager : MonoBehaviour
     // winning
     public Window FastestTime;
 
+    public float UIScale = 3;
+
     private void Update()
     {
         RemainingMinesText.text = Format(Grid.MineCount - Grid.FlaggedMines);
@@ -43,19 +45,25 @@ public class UIManager : MonoBehaviour
 
     public void HandleResize()
     {
-        int gridWidth = MineGrid.TileWidth * Grid.Width;
-        int gridHeight = MineGrid.TileHeight * Grid.Height;
+        var scaleSqrt = Mathf.Sqrt(UIScale);
+        var scaleVec = Vector3.one * UIScale;
 
-        int resWidth = 9 // Left border
+        var gridWidth = MineGrid.TileWidth * Grid.Width * scaleSqrt;
+        var gridHeight = MineGrid.TileHeight * Grid.Height * scaleSqrt;
+
+        float resWidth = 9 // Left border
                      + 8 // Right border
                      + gridWidth;
-        int resHeight = 20 // Toolbar
+        float resHeight = 20 // Toolbar
                       + 52 // Top UI/border
                       + 8 // Bottom border
                       + gridHeight;
 
-        Debug.Log("Updating resolution to " + resWidth + "x" + resHeight);
-        Screen.SetResolution(resWidth, resHeight, FullScreenMode.Windowed);
+        Debug.Log("Updating resolution to " + (int)resWidth + "x" + (int)resHeight);
+        Screen.SetResolution((int)resWidth, (int)resHeight, FullScreenMode.Windowed);
+
+        transform.localScale = scaleVec;
+        Grid.transform.localScale = scaleVec;
 
         var gridRectTransform = Grid.gameObject.GetComponent<RectTransform>();
         gridRectTransform.position = new Vector3(9, 8, 0);
@@ -66,7 +74,7 @@ public class UIManager : MonoBehaviour
         MenuBarTransform.anchoredPosition = new Vector3(0, resHeight - MenuBarTransform.sizeDelta.y);
         MenuBarTransform.sizeDelta = new Vector2(resWidth, MenuBarTransform.sizeDelta.y);
 
-        CountersTransform.anchoredPosition = new Vector3(0, gridHeight - 14);
+        CountersTransform.anchoredPosition = new Vector3(0, gridHeight/scaleSqrt - 14);
     }
 
     public void HandleWin()

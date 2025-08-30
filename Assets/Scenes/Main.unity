@@ -5004,6 +5004,7 @@ MonoBehaviour:
   CountersTransform: {fileID: 1376971373}
   MenuBarTransform: {fileID: 205404388}
   FastestTime: {fileID: 1144346715}
+  UIScale: 3
 --- !u!1 &1222999542
 GameObject:
   m_ObjectHideFlags: 0

@@ -136,7 +136,7 @@ public class MineGrid : MonoBehaviour
 
     public void CheckWin()
     {
-        if (State != States.Play || FlaggedMines == MineCount) goto win; // fast check
+        if (FlaggedMines != MineCount) return; // fast check
 
         for (int i = 0; i < TilesFlat.Length; i++) // slow check
         {
@@ -144,7 +144,6 @@ public class MineGrid : MonoBehaviour
             if (!(tile.IsMine ? tile.State == Tile.States.Flagged : tile.IsClear)) return;
         }
 
-        win:
         // well, we won
         State = States.Win;
         UI?.HandleWin();

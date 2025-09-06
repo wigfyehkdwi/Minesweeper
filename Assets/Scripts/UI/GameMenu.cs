@@ -5,6 +5,7 @@ public class GameMenu : Menu
     public MineGrid Grid;
     public Window CustomGridWindow;
     public Window FastestMineSweepersWindow;
+    public Window SetScaleWindow;
     public SaveLoadWindow SaveLoadWindow;
 
     public void NewGameOption()
@@ -41,6 +42,12 @@ public class GameMenu : Menu
     {
         Collapse();
         FastestMineSweepersWindow.gameObject.SetActive(true);
+    }
+
+    public void SetScaleOption()
+    {
+        Collapse();
+        SetScaleWindow.gameObject.SetActive(true);
     }
 
     public void SaveOption()

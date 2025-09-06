@@ -22,6 +22,7 @@ public class UIManager : MonoBehaviour
     // winning
     public Window FastestTime;
 
+    public GameObject GameRoot;
     public float UIScale = 3;
 
     private void Update()
@@ -50,30 +51,30 @@ public class UIManager : MonoBehaviour
         var gridWidth = MineGrid.TileWidth * Grid.Width;
         var gridHeight = MineGrid.TileHeight * Grid.Height;
 
-        float resWidth = (9 // Left border
-                     + 8 // Right border
-                     + gridWidth)
-                     * UIScale;
-        float resHeight = (20 // Toolbar
+        int height = 9 // Left border
+                       + 8 // Right border
+                       + gridWidth;
+        int width = 20 // Toolbar
                       + 52 // Top UI/border
                       + 8 // Bottom border
-                      + gridHeight)
-                      * UIScale;
+                      + gridHeight;
 
-        Debug.Log("Updating resolution to " + (int)resWidth + "x" + (int)resHeight);
-        Screen.SetResolution((int)resWidth, (int)resHeight, FullScreenMode.Windowed);
+        int scaledHeight = (int)(height * UIScale);
+        int scaledWidth = (int)(width * UIScale);
 
-        transform.localScale = scaleVec;
-        Grid.transform.localScale = scaleVec;
+        Debug.Log("Updating resolution to " + scaledHeight + "x" + scaledWidth);
+        Screen.SetResolution(scaledHeight, scaledWidth, FullScreenMode.Windowed);
+
+        GameRoot.transform.localScale = scaleVec;
 
         var gridRectTransform = Grid.gameObject.GetComponent<RectTransform>();
         gridRectTransform.position = new Vector3(9, 8, 0);
         gridRectTransform.sizeDelta = new Vector2(gridWidth, gridHeight);
 
-        UITransform.sizeDelta = new Vector2(resWidth, resHeight);
+        UITransform.sizeDelta = new Vector2(height, width);
         
-        MenuBarTransform.anchoredPosition = new Vector3(0, resHeight - MenuBarTransform.sizeDelta.y);
-        MenuBarTransform.sizeDelta = new Vector2(resWidth, MenuBarTransform.sizeDelta.y);
+        MenuBarTransform.anchoredPosition = new Vector3(0, width - MenuBarTransform.sizeDelta.y);
+        MenuBarTransform.sizeDelta = new Vector2(height, MenuBarTransform.sizeDelta.y);
 
         CountersTransform.anchoredPosition = new Vector3(0, gridHeight - 14);
     }

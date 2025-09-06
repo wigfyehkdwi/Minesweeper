@@ -107,8 +107,8 @@ public class MineGrid : MonoBehaviour
     public void AssignMines()
     {
         int assignedMines = 0;
-        int mineCount = Math.Min(MineCount, Area);
-        while (assignedMines < mineCount)
+        MineCount = Math.Min(MineCount, Area);
+        while (assignedMines < MineCount)
         {
             int x = UnityEngine.Random.Range(0, Width);
             int y = UnityEngine.Random.Range(0, Height);

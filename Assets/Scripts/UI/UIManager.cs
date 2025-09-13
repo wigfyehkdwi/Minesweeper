@@ -82,8 +82,8 @@ public class UIManager : MonoBehaviour
                       + 8 // Bottom border
                       + GridHeight;
 
-        int scaledWidth = (int)(Width * UIScale);
-        int scaledHeight = (int)(Height * UIScale);
+        int scaledWidth = (int)(Width * Math.Abs(UIScale));
+        int scaledHeight = (int)(Height * Math.Abs(UIScale));
 
         Debug.Log("Updating resolution to " + scaledWidth + "x" + scaledHeight);
         Screen.SetResolution(scaledWidth, scaledHeight, FullScreenMode.Windowed);

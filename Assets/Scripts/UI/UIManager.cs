@@ -26,8 +26,29 @@ public class UIManager : MonoBehaviour
     public GameObject GameRoot;
     public float UIScale = 3;
 
+    private Vector3 ScaleVec;
+    private int Width;
+    private int Height;
+    private int GridWidth;
+    private int GridHeight;
+
     private void Update()
     {
+        // Scale the UI correctly
+        GameRoot.transform.localScale = ScaleVec;
+
+        var gridRectTransform = Grid.gameObject.GetComponent<RectTransform>();
+        gridRectTransform.position = new Vector3(9, 8, 0);
+        gridRectTransform.sizeDelta = new Vector2(GridWidth, GridHeight);
+
+        UITransform.sizeDelta = new Vector2(Width, Height);
+
+        MenuBarTransform.anchoredPosition = new Vector3(0, Height - MenuBarTransform.sizeDelta.y);
+        MenuBarTransform.sizeDelta = new Vector2(Width, MenuBarTransform.sizeDelta.y);
+
+        CountersTransform.anchoredPosition = new Vector3(0, GridHeight - 14);
+
+        // Update timers
         RemainingMinesText.text = Format(Grid.MineCount - Grid.FlaggedMines);
         if (Grid.State == MineGrid.States.Play) TimerText.text = Format((int)Grid.TimeSinceReset);
 
@@ -47,37 +68,27 @@ public class UIManager : MonoBehaviour
 
     public void HandleResize()
     {
-        var scaleVec = Vector3.one * UIScale;
+        ScaleVec = Vector3.one * UIScale;
 
-        var gridWidth = MineGrid.TileWidth * Grid.Width;
-        var gridHeight = MineGrid.TileHeight * Grid.Height;
+        GridWidth = MineGrid.TileWidth * Grid.Width;
+        GridHeight = MineGrid.TileHeight * Grid.Height;
 
-        int height = 9 // Left border
+
+        Width = 9 // Left border
                        + 8 // Right border
-                       + gridWidth;
-        int width = 20 // Toolbar
+                       + GridWidth;
+        Height = 20 // Toolbar
                       + 52 // Top UI/border
                       + 8 // Bottom border
-                      + gridHeight;
+                      + GridHeight;
 
-        int scaledHeight = (int)(height * UIScale);
-        int scaledWidth = (int)(width * UIScale);
+        int scaledWidth = (int)(Width * UIScale);
+        int scaledHeight = (int)(Height * UIScale);
 
-        Debug.Log("Updating resolution to " + scaledHeight + "x" + scaledWidth);
-        Screen.SetResolution(scaledHeight, scaledWidth, FullScreenMode.Windowed);
+        Debug.Log("Updating resolution to " + scaledWidth + "x" + scaledHeight);
+        Screen.SetResolution(scaledWidth, scaledHeight, FullScreenMode.Windowed);
 
-        GameRoot.transform.localScale = scaleVec;
-
-        var gridRectTransform = Grid.gameObject.GetComponent<RectTransform>();
-        gridRectTransform.position = new Vector3(9, 8, 0);
-        gridRectTransform.sizeDelta = new Vector2(gridWidth, gridHeight);
-
-        UITransform.sizeDelta = new Vector2(height, width);
-        
-        MenuBarTransform.anchoredPosition = new Vector3(0, width - MenuBarTransform.sizeDelta.y);
-        MenuBarTransform.sizeDelta = new Vector2(height, MenuBarTransform.sizeDelta.y);
-
-        CountersTransform.anchoredPosition = new Vector3(0, gridHeight - 14);
+        // The rest has been moved into update
     }
 
     public void HandleWin()

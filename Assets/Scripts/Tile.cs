@@ -123,7 +123,7 @@ public class Tile : MonoBehaviour, IPointerClickHandler
         switch (State)
         {
             case States.Unchecked:
-                sprite = TileSprite;
+                sprite = IsMine ? UnknownTileSprite : TileSprite;
                 break;
             case States.Flagged:
                 sprite = (IsMine || Grid.State == MineGrid.States.Play) ? FlaggedTileSprite : FalseMineTileSprite;

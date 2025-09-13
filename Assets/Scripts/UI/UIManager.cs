@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -82,7 +83,7 @@ public class UIManager : MonoBehaviour
     public void HandleWin()
     {
         string key = Grid.Mode.ToString() + ".time";
-        if (Grid.Mode != MineGrid.Modes.Custom && (!PlayerPrefs.HasKey(key) || (int)Grid.TimeSinceReset > PlayerPrefs.GetInt(key))) FastestTime.gameObject.SetActive(true);
+        if (Grid.Mode != MineGrid.Modes.Custom && (!PlayerPrefs.HasKey(key) || Math.Clamp((int)Grid.TimeSinceReset, 0, 999) < PlayerPrefs.GetInt(key))) FastestTime.gameObject.SetActive(true);
     }
 
     public static string Format(int n)

@@ -26,27 +26,27 @@ public class UIManager : MonoBehaviour
     public GameObject GameRoot;
     public float UIScale = 3;
 
-    private Vector3 ScaleVec;
-    private int Width;
-    private int Height;
-    private int GridWidth;
-    private int GridHeight;
+    private Vector3 _scaleVec;
+    private int _width;
+    private int _height;
+    private int _gridWidth;
+    private int _gridHeight;
 
     private void Update()
     {
         // Scale the UI correctly
-        GameRoot.transform.localScale = ScaleVec;
+        GameRoot.transform.localScale = _scaleVec;
 
         var gridRectTransform = Grid.gameObject.GetComponent<RectTransform>();
         gridRectTransform.position = new Vector3(9, 8, 0);
-        gridRectTransform.sizeDelta = new Vector2(GridWidth, GridHeight);
+        gridRectTransform.sizeDelta = new Vector2(_gridWidth, _gridHeight);
 
-        UITransform.sizeDelta = new Vector2(Width, Height);
+        UITransform.sizeDelta = new Vector2(_width, _height);
 
-        MenuBarTransform.anchoredPosition = new Vector3(0, Height - MenuBarTransform.sizeDelta.y);
-        MenuBarTransform.sizeDelta = new Vector2(Width, MenuBarTransform.sizeDelta.y);
+        MenuBarTransform.anchoredPosition = new Vector3(0, _height - MenuBarTransform.sizeDelta.y);
+        MenuBarTransform.sizeDelta = new Vector2(_width, MenuBarTransform.sizeDelta.y);
 
-        CountersTransform.anchoredPosition = new Vector3(0, GridHeight - 14);
+        CountersTransform.anchoredPosition = new Vector3(0, _gridHeight - 14);
 
         // Update timers
         RemainingMinesText.text = Format(Grid.MineCount - Grid.FlaggedMines);
@@ -68,22 +68,22 @@ public class UIManager : MonoBehaviour
 
     public void HandleResize()
     {
-        ScaleVec = Vector3.one * UIScale;
+        _scaleVec = Vector3.one * UIScale;
 
-        GridWidth = MineGrid.TileWidth * Grid.Width;
-        GridHeight = MineGrid.TileHeight * Grid.Height;
+        _gridWidth = MineGrid.TileWidth * Grid.Width;
+        _gridHeight = MineGrid.TileHeight * Grid.Height;
 
 
-        Width = 9 // Left border
+        _width = 9 // Left border
                        + 8 // Right border
-                       + GridWidth;
-        Height = 20 // Toolbar
+                       + _gridWidth;
+        _height = 20 // Toolbar
                       + 52 // Top UI/border
                       + 8 // Bottom border
-                      + GridHeight;
+                      + _gridHeight;
 
-        int scaledWidth = (int)(Width * Math.Abs(UIScale));
-        int scaledHeight = (int)(Height * Math.Abs(UIScale));
+        int scaledWidth = (int)(_width * Math.Abs(UIScale));
+        int scaledHeight = (int)(_height * Math.Abs(UIScale));
 
         Debug.Log("Updating resolution to " + scaledWidth + "x" + scaledHeight);
         Screen.SetResolution(scaledWidth, scaledHeight, FullScreenMode.Windowed);

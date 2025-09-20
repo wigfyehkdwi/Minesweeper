@@ -1,7 +1,5 @@
 using System;
 using UnityEngine;
-using System.IO;
-using System.Windows.Forms;
 
 public class MineGrid : MonoBehaviour
 {
@@ -20,8 +18,6 @@ public class MineGrid : MonoBehaviour
     public const byte TileHeight = 16;
 
     private RectTransform rectTransform;
-    private int resWidth;
-    private int resHeight;
 
     public States State { get; set; }
 

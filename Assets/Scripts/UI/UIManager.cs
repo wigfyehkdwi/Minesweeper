@@ -23,7 +23,7 @@ public class UIManager : MonoBehaviour
     // winning
     public Window FastestTime;
 
-    public GameObject GameRoot;
+    public Canvas Canvas;
     public float UIScale = 3;
 
     private Vector3 _scaleVec;
@@ -35,7 +35,7 @@ public class UIManager : MonoBehaviour
     private void Update()
     {
         // Scale the UI correctly
-        GameRoot.transform.localScale = _scaleVec;
+        Canvas.scaleFactor = UIScale;
 
         var gridRectTransform = Grid.gameObject.GetComponent<RectTransform>();
         gridRectTransform.position = new Vector3(9, 8, 0);

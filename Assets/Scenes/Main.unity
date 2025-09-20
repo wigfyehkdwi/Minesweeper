@@ -5542,7 +5542,7 @@ MonoBehaviour:
   CountersTransform: {fileID: 1376971373}
   MenuBarTransform: {fileID: 205404388}
   FastestTime: {fileID: 1144346715}
-  GameRoot: {fileID: 1758748617}
+  Canvas: {fileID: 47618713}
   UIScale: 1
 --- !u!1 &1222999542
 GameObject:
